@@ -1,7 +1,13 @@
 import React from "react";
 import petsData from "../petsData";
+import { useParams } from "react-router";
 const PetDetail = () => {
-  const pet = petsData[0];
+  const { petId } = useParams();
+  const pet = petsData.find((pet) => pet.id == petId);
+
+  if (!pet) {
+    return <h1>Pet was not found</h1>;
+  }
   return (
     <div className="bg-[#F9E3BE] w-screen h-[100vh] flex justify-center items-center">
       <div className="border border-black rounded-md w-[70%] h-[70%] overflow-hidden flex flex-col md:flex-row p-5">
