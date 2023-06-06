@@ -1,9 +1,29 @@
-import React from "react";
-import petsData from "../petsData";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { deletePet, getPet, updatePet } from "../api/pets";
+
 const PetDetail = () => {
   const { petId } = useParams();
-  const pet = petsData.find((pet) => pet.id == petId);
+  const [pet, setPet] = useState({});
+
+  //**** */
+  const fetchApi = async () => {
+    const res = await getPet(petId);
+    setPet(res);
+  };
+
+  useEffect(() => {
+    fetchApi();
+  }, []);
+
+  const updateApi = async () => {
+    const res = await updatePet(petId, pet.name, pet.type, pet.image);
+    setPet(res);
+  };
+
+  const deletApi = async () => {
+    const res = await deletePet(petId);
+  };
 
   if (!pet) {
     return <h1>Pet was not found</h1>;
@@ -23,11 +43,17 @@ const PetDetail = () => {
           <h1>Type: {pet.type}</h1>
           <h1>adopted: {pet.adopted}</h1>
 
-          <button className="w-[70px] border border-black rounded-md  hover:bg-green-400 mb-5">
+          <button
+            onClick={updateApi}
+            className="w-[70px] border border-black rounded-md  hover:bg-green-400 mb-5"
+          >
             Adobt
           </button>
 
-          <button className="w-[70px] border border-black rounded-md  hover:bg-red-400">
+          <button
+            onClick={deletApi}
+            className="w-[70px] border border-black rounded-md  hover:bg-red-400"
+          >
             Delete
           </button>
         </div>
